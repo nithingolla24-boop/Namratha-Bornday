@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Namratha ❤️🎂</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Noto+Sans+Telugu:wght@400;600;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        * {
+            font-family: 'Poppins', 'Noto Sans Telugu', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .handwritten {
+            font-family: 'Caveat', cursive;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            color: #ffffff;
+        }
+
+        /* Glassmorphism Styles */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-btn {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-btn.active {
+            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 20px rgba(255, 65, 108, 0.6);
+            transform: translateY(-2px);
+        }
+
+        /* Floating Hearts Animation */
+        .heart-particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+            animation: floatUp 8s linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) scale(0.3) rotate(0deg);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.8;
+            }
+            80% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-10vh) scale(1.2) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .glow-text {
+            text-shadow: 0 0 15px rgba(255, 105, 180, 0.7), 0 0 30px rgba(255, 182, 193, 0.5);
+        }
+
+        .gold-glow {
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.8), 0 0 30px rgba(255, 223, 0, 0.5);
+        }
+
+        /* Gift Box Animations */
+        .gift-box {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .gift-box:hover {
+            transform: scale(1.05);
+        }
+
+        .lid {
+            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transform-origin: top center;
+        }
+
+        .gift-opened .lid {
+            transform: translateY(-60px) rotate(-15deg);
+        }
+
+        /* Content Fade Animation */
+        .tab-content {
+            display: none;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom WhatsApp Background Pattern */
+        .wa-bg {
+            background-color: #0b141a;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 0);
+            background-size: 16px 16px;
+        }
+
+        /* Photo Frame Effect */
+        .polaroid-frame {
+            background: #ffffff;
+            padding: 12px 12px 24px 12px;
+            box-shadow: 0 20px 30px rgba(0,0,0,0.5);
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+        .polaroid-frame:hover {
+            transform: rotate(0deg) scale(1.02);
+        }
+
+        /* Responsive Image Orientation */
+        .photo-img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            transform: rotate(90deg) scale(0.9);
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen justify-between items-center px-3 py-6 relative">
+
+    <!-- Floating Background Particles Container -->
+    <div id="heartsContainer"></div>
+
+    <!-- Music & Confetti Controls -->
+    <div class="fixed top-4 right-4 z-50 flex gap-2">
+        <button id="musicBtn" onclick="toggleAudio()" class="glass-btn text-white p-3 rounded-full flex items-center justify-center hover:bg-pink-600/50 shadow-lg" title="Play Birthday Song">
+            <i id="musicIcon" class="fas fa-music text-lg"></i>
+        </button>
+        <button onclick="triggerConfetti()" class="glass-btn text-white p-3 rounded-full flex items-center justify-center hover:bg-purple-600/50 shadow-lg" title="Celebrate!">
+            <i class="fas fa-sparkles text-lg text-yellow-300"></i>
+        </button>
+    </div>
+
+    <!-- Main Outer Container -->
+    <div class="w-full max-w-4xl z-10 my-auto">
+        
+        <!-- Header Banner -->
+        <div class="text-center mb-6 px-2">
+            <div class="inline-block mb-2 px-4 py-1 rounded-full bg-pink-500/20 border border-pink-500/30 text-pink-300 text-xs sm:text-sm font-semibold uppercase tracking-widest backdrop-blur-md">
+                ✨ Special Birthday Surprise ✨
+            </div>
+            <h1 class="text-3xl sm:text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-purple-300 to-amber-200 glow-text py-2">
+                Happy Birthday Namratha ❤️🎂
+            </h1>
+            <p class="text-pink-200/80 text-sm sm:text-base font-light mt-1">
+                A Magical Gift Collection For My Bestie 💖
+            </p>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="flex flex-wrap justify-center gap-2 mb-6 px-2">
+            <button onclick="switchTab('message')" id="tab-message" class="glass-btn active px-3.5 py-2 rounded-full text-xs sm:text-sm font-medium flex items-center gap-1.5">
+                <i class="fas fa-heart text-pink-400"></i>
+                <span>ఆత్మీయ సందేశం</span>
+            </button>
+            <button onclick="switchTab('scene')" id="tab-scene" class="glass-btn px-3.5 py-2 rounded-full text-xs sm:text-sm font-medium flex items-center gap-1.5">
+                <i class="fas fa-user-friends text-purple-400"></i>
+                <span>గిఫ్ట్ సీన్</span>
+            </button>
+            <button onclick="switchTab('earrings')" id="tab-earrings" class="glass-btn px-3.5 py-2 rounded-full text-xs sm:text-sm font-medium flex items-center gap-1.5">
+                <i class="fas fa-gem text-amber-300"></i>
+                <span>Ear Rings</span>
+            </button>
+            <button onclick="switchTab('kadiyam')" id="tab-kadiyam" class="glass-btn px-3.5 py-2 rounded-full text-xs sm:text-sm font-medium flex items-center gap-1.5">
+                <i class="fas fa-ring text-yellow-400"></i>
+                <span>కడియం</span>
+            </button>
+            <button onclick="switchTab('whatsapp')" id="tab-whatsapp" class="glass-btn px-3.5 py-2 rounded-full text-xs sm:text-sm font-medium flex items-center gap-1.5">
+                <i class="fab fa-whatsapp text-emerald-400"></i>
+                <span>మొదటి పరిచయం</span>
+            </button>
+            <button onclick="switchTab('photo')" id="tab-photo" class="glass-btn px-3.5 py-2 rounded-full text-xs sm:text-sm font-medium flex items-center gap-1.5">
+                <i class="fas fa-camera-retro text-rose-300"></i>
+                <span>మన జ్ఞాపకం</span>
+            </button>
+            <button onclick="switchTab('bond')" id="tab-bond" class="glass-btn px-3.5 py-2 rounded-full text-xs sm:text-sm font-medium flex items-center gap-1.5">
+                <i class="fas fa-infinity text-cyan-300"></i>
+                <span>మా బంధం</span>
+            </button>
+        </div>
+
+        <!-- Dynamic Content Display Area -->
+        <div class="glass-panel rounded-3xl p-4 sm:p-7 min-h-[440px] flex items-center justify-center relative overflow-hidden">
+            
+            <!-- Tab 1: Heartfelt Message (ఆత్మీయ సందేశం) -->
+            <div id="content-message" class="tab-content active w-full">
+                <div class="relative bg-gradient-to-b from-pink-950/40 to-purple-950/40 border border-pink-500/30 rounded-2xl p-5 sm:p-7 shadow-2xl">
+                    <div class="absolute -top-3 -right-3 text-pink-400 text-3xl animate-bounce">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    
+                    <h2 class="text-xl sm:text-2xl font-bold text-pink-300 mb-4 pb-2 border-b border-pink-500/20 flex items-center gap-2">
+                        <span>Happy Birthday Namratha ❤️🎂</span>
+                    </h2>
+
+                    <div class="space-y-4 text-sm sm:text-base leading-relaxed text-pink-100/90 font-normal">
+                        <p class="bg-pink-500/10 p-3.5 rounded-xl border border-pink-500/20">
+                            నువ్వు నా జీవితంలోకి వచ్చినందుకు నిజంగా చాలా హ్యాపీగా ఉంది. నువ్వు నాకు కేవలం ఒక ఫ్రెండ్ మాత్రమే కాదు, నా జీవితంలో చాలా స్పెషల్ పర్సన్‌వి. 🫂❤️
+                        </p>
+                        
+                        <p class="bg-purple-500/10 p-3.5 rounded-xl border border-purple-500/20">
+                            మన మధ్య ఎన్ని గొడవలు వచ్చినా, ఎన్ని చిన్న చిన్న అలకలు ఉన్నా మన ఫ్రెండ్‌షిప్ మాత్రం ఎప్పటికీ ఇలాగే ఉండాలని కోరుకుంటున్నాను. నీ ముఖంలో ఎప్పుడూ ఈ నవ్వు ఇలాగే ఉండాలి. నీ జీవితంలో నువ్వు కోరుకున్న ప్రతి కల నిజం కావాలి.
+                        </p>
+
+                        <p class="bg-pink-500/10 p-3.5 rounded-xl border border-pink-500/20">
+                            నువ్వు ఎప్పుడైనా బాధలో ఉన్నప్పుడు నీకు తోడుగా ఉండే ఒక మంచి ఫ్రెండ్‌గా నేను ఉంటాను. నీ సంతోషంలోనే కాదు, నీ కష్టాల్లో కూడా నీ పక్కన ఉండాలని కోరుకుంటున్నాను.
+                        </p>
+
+                        <p class="bg-amber-500/10 p-3.5 rounded-xl border border-amber-500/20 font-semibold text-amber-200">
+                            ఒక విషయం ఎప్పటికీ గుర్తుపెట్టుకో… నువ్వు ఎంతమందికి దూరమైనా, నీకు ఒక మంచి బెస్ట్ ఫ్రెండ్ ఎప్పుడూ ఉంటాడు. అది నేనే! ❤️
+                        </p>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-pink-500/20 text-center space-y-2">
+                        <p class="text-base sm:text-lg font-bold text-pink-300">
+                            Once again, Happy Birthday my Bestie Namratha! 🥹💗
+                        </p>
+                        <p class="text-xs sm:text-sm text-pink-200/80 italic">
+                            Stay happy, keep smiling and never change yourself. You are truly special! 🫶🏻
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: Gift Scene (స్పెషల్ గిఫ్ట్ సీన్) -->
+            <div id="content-scene" class="tab-content w-full text-center">
+                <div class="flex flex-col items-center justify-center space-y-4">
+                    <div class="relative w-full max-w-md h-64 sm:h-72 rounded-2xl overflow-hidden border border-purple-500/30 bg-gradient-to-b from-indigo-950/60 to-purple-950/60 flex items-center justify-center p-4">
+                        
+                        <svg viewBox="0 0 500 350" class="w-full h-full drop-shadow-2xl">
+                            <circle cx="250" cy="100" r="70" fill="url(#moonGrad)" opacity="0.3" />
+                            <defs>
+                                <radialGradient id="moonGrad" cx="50%" cy="50%" r="50%">
+                                    <stop offset="0%" stop-color="#fff" stop-opacity="0.8"/>
+                                    <stop offset="100%" stop-color="#a855f7" stop-opacity="0"/>
+                                </radialGradient>
+                                <linearGradient id="giftGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#ff416c"/>
+                                    <stop offset="100%" stop-color="#ff4b2b"/>
+                                </linearGradient>
+                            </defs>
+
+                            <circle cx="100" cy="50" r="2" fill="#fff" class="animate-ping" />
+                            <circle cx="400" cy="70" r="2.5" fill="#ffd700" class="animate-ping" />
+                            <circle cx="220" cy="40" r="1.5" fill="#fff" />
+                            <circle cx="340" cy="120" r="2" fill="#fff" />
+
+                            <!-- BOY Silhouette -->
+                            <g transform="translate(100, 110)">
+                                <circle cx="40" cy="35" r="22" fill="#e0e7ff" />
+                                <path d="M 20 35 Q 35 10 60 30 Q 40 15 20 35 Z" fill="#312e81" />
+                                <path d="M 15 130 C 15 70, 65 70, 65 130 Z" fill="#4338ca" />
+                                <path d="M 50 75 Q 85 75 105 85" stroke="#e0e7ff" stroke-width="10" stroke-linecap="round" fill="none" />
+                            </g>
+
+                            <!-- GIFT BOX -->
+                            <g transform="translate(225, 175)" class="animate-bounce">
+                                <rect x="0" y="10" width="45" height="40" rx="4" fill="url(#giftGrad)" />
+                                <rect x="-3" y="3" width="51" height="12" rx="3" fill="#ffd700" />
+                                <rect x="18" y="3" width="9" height="47" fill="#ffd700" />
+                                <path d="M 12 0 C 5 -10, 20 -15, 22 3 C 25 -15, 40 -10, 32 0 Z" fill="#ffd700" />
+                            </g>
+
+                            <!-- GIRL Silhouette -->
+                            <g transform="translate(290, 110)">
+                                <path d="M 30 30 Q 10 90 25 120 Q 60 90 55 30 Z" fill="#4c1d95" />
+                                <circle cx="40" cy="35" r="20" fill="#fce7f3" />
+                                <path d="M 20 130 C 20 70, 60 70, 60 130 Z" fill="#db2777" />
+                                <path d="M 30 75 Q -5 80 -15 88" stroke="#fce7f3" stroke-width="9" stroke-linecap="round" fill="none" />
+                            </g>
+
+                            <path d="M 250 140 Q 240 120 250 110 Q 260 120 250 140 Z" fill="#ff4b2b" class="animate-pulse" />
+                        </svg>
+                    </div>
+
+                    <div class="bg-pink-500/10 border border-pink-500/20 rounded-2xl p-4 max-w-md">
+                        <p class="text-pink-200 text-sm sm:text-base font-medium">
+                            "A small token of endless friendship & love for the most amazing person in my life! 🎁✨"
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 3: Ear Rings Gift Box -->
+            <div id="content-earrings" class="tab-content w-full text-center">
+                <div class="flex flex-col items-center justify-center">
+                    <p class="text-pink-200 text-sm mb-4">
+                        👇 Tap the gift box to unbox your special birthday earrings!
+                    </p>
+
+                    <div id="earringBoxContainer" onclick="openGift('earring')" class="gift-box relative w-56 h-56 flex flex-col items-center justify-center my-2">
+                        <div id="earringClosed" class="relative w-44 h-44 flex flex-col items-center justify-end">
+                            <div class="lid absolute top-6 z-20 w-48 h-12 bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 rounded-lg shadow-xl border-b-2 border-amber-600 flex items-center justify-center">
+                                <div class="w-10 h-full bg-red-600"></div>
+                                <div class="absolute -top-6 text-red-600 text-3xl"><i class="fas fa-ribbon"></i></div>
+                            </div>
+                            <div class="w-44 h-32 bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-600 rounded-b-xl shadow-2xl relative overflow-hidden flex justify-center">
+                                <div class="w-10 h-full bg-red-600"></div>
+                            </div>
+                        </div>
+
+                        <div id="earringOpened" class="hidden flex-col items-center justify-center space-y-3">
+                            <div class="relative p-4 bg-gradient-to-b from-purple-900/80 to-pink-900/80 border-2 border-amber-400/60 rounded-2xl shadow-2xl flex items-center justify-center gap-6">
+                                <svg width="70" height="110" viewBox="0 0 100 150">
+                                    <defs>
+                                        <linearGradient id="gold1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="#FFE259"/>
+                                            <stop offset="100%" stop-color="#FFA751"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <circle cx="50" cy="20" r="12" fill="url(#gold1)" stroke="#fff" stroke-width="2"/>
+                                    <circle cx="50" cy="20" r="5" fill="#e11d48"/>
+                                    <line x1="50" y1="32" x2="50" y2="45" stroke="#FFE259" stroke-width="3"/>
+                                    <path d="M 20 75 Q 50 40 80 75 Z" fill="url(#gold1)" stroke="#d97706" stroke-width="2"/>
+                                    <circle cx="25" cy="90" r="4" fill="#fff"/>
+                                    <circle cx="40" cy="95" r="4" fill="#e11d48"/>
+                                    <circle cx="50" cy="97" r="5" fill="#fff"/>
+                                    <circle cx="60" cy="95" r="4" fill="#e11d48"/>
+                                    <circle cx="75" cy="90" r="4" fill="#fff"/>
+                                </svg>
+                                <svg width="70" height="110" viewBox="0 0 100 150">
+                                    <circle cx="50" cy="20" r="12" fill="url(#gold1)" stroke="#fff" stroke-width="2"/>
+                                    <circle cx="50" cy="20" r="5" fill="#e11d48"/>
+                                    <line x1="50" y1="32" x2="50" y2="45" stroke="#FFE259" stroke-width="3"/>
+                                    <path d="M 20 75 Q 50 40 80 75 Z" fill="url(#gold1)" stroke="#d97706" stroke-width="2"/>
+                                    <circle cx="25" cy="90" r="4" fill="#fff"/>
+                                    <circle cx="40" cy="95" r="4" fill="#e11d48"/>
+                                    <circle cx="50" cy="97" r="5" fill="#fff"/>
+                                    <circle cx="60" cy="95" r="4" fill="#e11d48"/>
+                                    <circle cx="75" cy="90" r="4" fill="#fff"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="earringText" class="mt-4 bg-amber-500/10 border border-amber-500/30 rounded-2xl p-4 max-w-md hidden">
+                        <h3 class="text-lg font-bold text-amber-300 gold-glow">
+                            Elegant Golden Earrings 💎✨
+                        </h3>
+                        <p class="text-xs sm:text-sm text-amber-100/90 mt-1">
+                            "Elegant Jhumka Earrings for the most beautiful girl Namratha! May your life shine as bright as these golden jewels."
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 4: Kadiyam Gift Box -->
+            <div id="content-kadiyam" class="tab-content w-full text-center">
+                <div class="flex flex-col items-center justify-center">
+                    <p class="text-pink-200 text-sm mb-4">
+                        👇 Tap the royal box to reveal your traditional Kadiyam gift!
+                    </p>
+
+                    <div id="kadiyamBoxContainer" onclick="openGift('kadiyam')" class="gift-box relative w-56 h-56 flex flex-col items-center justify-center my-2">
+                        <div id="kadiyamClosed" class="relative w-44 h-44 flex flex-col items-center justify-end">
+                            <div class="lid absolute top-6 z-20 w-48 h-12 bg-gradient-to-r from-purple-600 via-pink-500 to-purple-700 rounded-lg shadow-xl border-b-2 border-purple-800 flex items-center justify-center">
+                                <div class="w-10 h-full bg-amber-400"></div>
+                                <div class="absolute -top-6 text-amber-300 text-3xl"><i class="fas fa-crown"></i></div>
+                            </div>
+                            <div class="w-44 h-32 bg-gradient-to-r from-purple-700 via-pink-600 to-purple-800 rounded-b-xl shadow-2xl relative overflow-hidden flex justify-center">
+                                <div class="w-10 h-full bg-amber-400"></div>
+                            </div>
+                        </div>
+
+                        <div id="kadiyamOpened" class="hidden flex-col items-center justify-center space-y-3">
+                            <div class="relative p-6 bg-gradient-to-b from-amber-950/80 to-purple-950/80 border-2 border-yellow-400/70 rounded-full shadow-2xl flex items-center justify-center">
+                                <svg width="150" height="150" viewBox="0 0 200 200">
+                                    <defs>
+                                        <linearGradient id="kadiyamGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="#FFE259"/>
+                                            <stop offset="50%" stop-color="#FFD700"/>
+                                            <stop offset="100%" stop-color="#D4AF37"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <circle cx="100" cy="100" r="70" fill="none" stroke="url(#kadiyamGold)" stroke-width="22" stroke-dasharray="415" stroke-dashoffset="30"/>
+                                    <circle cx="145" cy="48" r="14" fill="#D4AF37" stroke="#fff" stroke-width="2"/>
+                                    <circle cx="145" cy="48" r="6" fill="#be123c"/>
+                                    <circle cx="55" cy="48" r="14" fill="#D4AF37" stroke="#fff" stroke-width="2"/>
+                                    <circle cx="55" cy="48" r="6" fill="#be123c"/>
+                                    <circle cx="100" cy="170" r="5" fill="#0284c7"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="kadiyamText" class="mt-4 bg-purple-500/10 border border-purple-500/30 rounded-2xl p-4 max-w-md hidden">
+                        <h3 class="text-lg font-bold text-yellow-300 gold-glow">
+                            రాయల్ బంగారు కడియం (Traditional Kadiyam) 💫💍
+                        </h3>
+                        <p class="text-xs sm:text-sm text-purple-100/90 mt-1">
+                            "A traditional gold kadiyam as strong & unbreakable as our best friendship!"
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 5: First Met on WhatsApp (మొదటి పరిచయం) -->
+            <div id="content-whatsapp" class="tab-content w-full">
+                <div class="max-w-md mx-auto wa-bg rounded-2xl border border-emerald-500/30 overflow-hidden shadow-2xl">
+                    <!-- WhatsApp Header -->
+                    <div class="bg-[#202c33] p-3 flex items-center justify-between border-b border-emerald-900/40">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-pink-500 to-purple-600 flex items-center justify-center font-bold text-white text-base">
+                                N
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-100">Namratha ❤️ (Bestie)</h4>
+                                <p class="text-[11px] text-emerald-400">online • Special Memories</p>
+                            </div>
+                        </div>
+                        <i class="fab fa-whatsapp text-emerald-400 text-2xl"></i>
+                    </div>
+
+                    <!-- Chat Container -->
+                    <div class="p-4 space-y-3 text-xs sm:text-sm">
+                        <!-- Date Badge -->
+                        <div class="flex justify-center my-1">
+                            <span class="bg-[#182229] text-gray-400 text-[10px] px-3 py-1 rounded-md uppercase tracking-wider border border-gray-800">
+                                First Day on WhatsApp 💬
+                            </span>
+                        </div>
+
+                        <!-- Chat Bubbles -->
+                        <div class="flex flex-col space-y-2">
+                            <!-- Left Bubble (Sent) -->
+                            <div class="self-start bg-[#202c33] text-gray-200 rounded-xl rounded-tl-none p-3 max-w-[80%] shadow">
+                                <p>Hey Namratha! 👋</p>
+                                <span class="text-[9px] text-gray-400 block text-right mt-1">10:15 AM</span>
+                            </div>
+
+                            <!-- Right Bubble (Received) -->
+                            <div class="self-end bg-[#005c4b] text-white rounded-xl rounded-tr-none p-3 max-w-[80%] shadow">
+                                <p>Hi! Haa, cheppu.. 😊</p>
+                                <span class="text-[9px] text-emerald-200 block text-right mt-1">10:16 AM</span>
+                            </div>
+
+                            <!-- Left Bubble -->
+                            <div class="self-start bg-[#202c33] text-gray-200 rounded-xl rounded-tl-none p-3 max-w-[85%] shadow">
+                                <p>Mana పరిచయం ఇక్కడే WhatsApp లో ఒక చిన్న 'Hi' తో మొదలైంది... కానీ ఈ రోజు నువ్వు నా జీవితంలో మోస్ట్ స్పెషల్ పర్సన్ అవుతావని అనుకోలేదు! 🥹✨</p>
+                                <span class="text-[9px] text-gray-400 block text-right mt-1">10:18 AM</span>
+                            </div>
+
+                            <!-- Special Banner Inside Chat -->
+                            <div class="bg-gradient-to-r from-pink-900/60 to-purple-900/60 p-3 rounded-xl border border-pink-500/30 text-center my-2">
+                                <p class="text-pink-200 font-medium text-xs">
+                                    "ఆ ఒక్క వాట్సాప్ మెసేజ్‌తో మొదలైన మన ఫ్రెండ్‌షిప్ ఇప్పుడు లైఫ్‌లాంగ్ మెమరీగా మారింది! ❤️"
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 6: Our Memories Photo (మన జ్ఞాపకం) -->
+            <div id="content-photo" class="tab-content w-full text-center">
+                <div class="flex flex-col items-center justify-center">
+                    <h3 class="text-xl sm:text-2xl font-bold text-pink-300 mb-4 flex items-center justify-center gap-2">
+                        <span>మన స్పెషల్ జ్ఞాపకం</span> 📸❤️
+                    </h3>
+                    
+                    <!-- Polaroid Styled Frame with Soft Shadow & Glow -->
+                    <div class="polaroid-frame w-72 sm:w-80 flex flex-col items-center my-2 border border-pink-300/30 shadow-2xl relative group">
+                        <div class="absolute -top-3 -right-3 z-10 text-rose-500 text-2xl animate-pulse">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div class="absolute -top-3 -left-3 z-10 text-amber-400 text-2xl">
+                            <i class="fas fa-sparkles"></i>
+                        </div>
+
+                        <!-- Canvas/SVG Container containing the memory photo directly -->
+                        <div class="w-full h-80 sm:h-96 overflow-hidden rounded-lg bg-gray-900 flex items-center justify-center relative shadow-inner p-2">
+                            <svg viewBox="0 0 400 550" class="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105">
+                                <g transform="rotate(90 200 275) scale(0.95 0.95)">
+                                    <image href="image_2.png" x="-75" y="-50" width="550" height="650" preserveAspectRatio="xMidYMid slice"/>
+                                </g>
+                            </svg>
+                        </div>
+                        
+                        <div class="mt-4 text-gray-800 font-bold text-lg handwritten tracking-wide flex items-center gap-2">
+                            <span>Namratha & Bestie Forever</span> ✨
+                        </div>
+                    </div>
+
+                    <p class="text-xs sm:text-sm text-pink-200/90 mt-4 max-w-md italic bg-pink-500/10 p-3 rounded-xl border border-pink-500/20">
+                        "ఈ ఫోటోలాగే మన ఫ్రెండ్‌షిప్ జ్ఞాపకాలు ఎప్పటికీ నా గుండెల్లో భద్రంగా ఉంటాయి! 🫂❤️"
+                    </p>
+                </div>
+            </div>
+
+            <!-- Tab 7: About Our Bond (మా బంధం గురించి) -->
+            <div id="content-bond" class="tab-content w-full">
+                <div class="bg-gradient-to-b from-purple-950/50 to-pink-950/50 border border-purple-500/30 rounded-2xl p-5 sm:p-7 shadow-2xl relative">
+                    <div class="text-center mb-4">
+                        <div class="inline-block p-3 rounded-full bg-pink-500/20 text-pink-300 mb-2">
+                            <i class="fas fa-infinity text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-300 to-amber-200">
+                            మా స్పెషల్ బంధం గురించి... 💖
+                        </h3>
+                    </div>
+
+                    <div class="space-y-4 text-xs sm:text-sm leading-relaxed text-purple-100/90">
+                        <div class="bg-purple-900/30 p-4 rounded-xl border border-purple-500/20">
+                            <h4 class="font-bold text-pink-300 mb-1 flex items-center gap-2">
+                                <i class="fas fa-star text-yellow-400"></i> మాటల్లో చెప్పలేని బంధం:
+                            </h4>
+                            <p>
+                                జగమంత కుటుంబంలో మనకి ఎంతోమంది పరిచయం కావచ్చు, కానీ మన మనసుకి బాగా దగ్గరయ్యే వాళ్ళు కొందరే ఉంటారు. అలాంటి అరుదైన పర్సన్ నా జీవితంలో నువ్వు, నమ్రతా!
+                            </p>
+                        </div>
+
+                        <div class="bg-pink-900/30 p-4 rounded-xl border border-pink-500/20">
+                            <h4 class="font-bold text-pink-300 mb-1 flex items-center gap-2">
+                                <i class="fas fa-shield-heart text-pink-400"></i> ఎల్లప్పుడూ నీకు తోడుగా:
+                            </h4>
+                            <p>
+                                నువ్వు నవ్వినప్పుడు నీ నవ్వు చూసి సంతోషపడే బెస్ట్ ఫ్రెండ్‌గా, నువ్వు ఏమైనా కష్టంలో ఉన్నప్పుడు 'నేను ఉన్నాను' అని ధైర్యం చెప్పే నిఖార్సయిన తోడుగా నేను ఎల్లప్పుడూ నీ పక్కనే ఉంటాను.
+                            </p>
+                        </div>
+
+                        <div class="bg-amber-900/30 p-4 rounded-xl border border-amber-500/20 text-amber-200 font-medium">
+                            <h4 class="font-bold text-amber-300 mb-1 flex items-center gap-2">
+                                <i class="fas fa-crown text-yellow-300"></i> బెస్ట్ ఫ్రెండ్స్ ఫరెవర్:
+                            </h4>
+                            <p>
+                                సమయం మారవచ్చు, పరిస్థితులు మారవచ్చు.. కానీ నీపట్ల నాకున్న గౌరవం, మన మధ్య ఉన్న ఈ పవిత్రమైన స్నేహం ఎప్పటికీ మారదు. నా బెస్ట్ ఫ్రెండ్‌గా నువ్వు నా జీవితంలో ఉన్నందుకు ఐయామ్ సో లక్కీ! ❤️
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-6">
+            <button onclick="triggerConfetti()" class="px-6 py-2.5 rounded-full bg-gradient-to-r from-pink-500 to-rose-600 hover:from-pink-600 hover:to-rose-700 text-white font-semibold text-xs sm:text-sm shadow-xl transform active:scale-95 transition-all">
+                🎉 Send Birthday Blessings & Confetti 🎉
+            </button>
+            <p class="text-xs text-pink-200/50 mt-3 font-light">
+                Crafted with love for Namratha's Birthday • Best Friends Forever 🤝
+            </p>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        function switchTab(tabName) {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(el => el.classList.remove('active'));
+
+            const buttons = document.querySelectorAll('.glass-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            const selectedContent = document.getElementById(`content-${tabName}`);
+            const selectedBtn = document.getElementById(`tab-${tabName}`);
+
+            if (selectedContent && selectedBtn) {
+                selectedContent.classList.add('active');
+                selectedBtn.classList.add('active');
+            }
+
+            triggerConfettiSmall();
+        }
+
+        function openGift(type) {
+            if (type === 'earring') {
+                document.getElementById('earringClosed').classList.add('hidden');
+                const opened = document.getElementById('earringOpened');
+                opened.classList.remove('hidden');
+                opened.classList.add('flex');
+                document.getElementById('earringText').classList.remove('hidden');
+            } else if (type === 'kadiyam') {
+                document.getElementById('kadiyamClosed').classList.add('hidden');
+                const opened = document.getElementById('kadiyamOpened');
+                opened.classList.remove('hidden');
+                opened.classList.add('flex');
+                document.getElementById('kadiyamText').classList.remove('hidden');
+            }
+            triggerConfetti();
+            playSparkleSound();
+        }
+
+        function createFloatingHearts() {
+            const container = document.getElementById('heartsContainer');
+            const heartIcons = ['❤️', '💖', '💗', '✨', '🌸', '✨'];
+            for (let i = 0; i < 25; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart-particle';
+                heart.innerText = heartIcons[Math.floor(Math.random() * heartIcons.length)];
+                heart.style.left = `${Math.random() * 100}vw`;
+                heart.style.animationDuration = `${5 + Math.random() * 6}s`;
+                heart.style.animationDelay = `${Math.random() * 5}s`;
+                heart.style.fontSize = `${14 + Math.random() * 20}px`;
+                container.appendChild(heart);
+            }
+        }
+
+        function triggerConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 80,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#ff416c', '#ff4b2b', '#ffd700', '#ec4899', '#a855f7']
+                });
+            }
+        }
+
+        function triggerConfettiSmall() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 25,
+                    spread: 50,
+                    origin: { y: 0.7 }
+                });
+            }
+        }
+
+        let audioCtx = null;
+        let isPlaying = false;
+        let melodyInterval = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playNote(freq, duration) {
+            if (!audioCtx || !isPlaying) return;
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) {}
+        }
+
+        function playSparkleSound() {
+            initAudio();
+            if (!audioCtx) return;
+            const notes = [523.25, 659.25, 783.99, 1046.50];
+            notes.forEach((freq, idx) => {
+                setTimeout(() => {
+                    try {
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+                        osc.start();
+                        osc.stop(audioCtx.currentTime + 0.3);
+                    } catch(err){}
+                }, idx * 80);
+            });
+        }
+
+        const birthdayNotes = [
+            { f: 264, d: 0.4 }, { f: 264, d: 0.4 }, { f: 297, d: 0.8 }, { f: 264, d: 0.8 }, { f: 352, d: 0.8 }, { f: 330, d: 1.2 },
+            { f: 264, d: 0.4 }, { f: 264, d: 0.4 }, { f: 297, d: 0.8 }, { f: 264, d: 0.8 }, { f: 396, d: 0.8 }, { f: 352, d: 1.2 }
+        ];
+
+        function toggleAudio() {
+            initAudio();
+            const musicIcon = document.getElementById('musicIcon');
+            if (isPlaying) {
+                isPlaying = false;
+                clearInterval(melodyInterval);
+                musicIcon.className = "fas fa-music text-lg";
+            } else {
+                isPlaying = true;
+                musicIcon.className = "fas fa-pause text-lg text-pink-400 animate-pulse";
+                let noteIndex = 0;
+                melodyInterval = setInterval(() => {
+                    if (!isPlaying) return;
+                    const currentNote = birthdayNotes[noteIndex];
+                    playNote(currentNote.f, currentNote.d);
+                    noteIndex = (noteIndex + 1) % birthdayNotes.length;
+                }, 550);
+            }
+        }
+
+        window.onload = function() {
+            createFloatingHearts();
+            setTimeout(triggerConfetti, 500);
+        };
+    </script>
+</body>
+</html>
